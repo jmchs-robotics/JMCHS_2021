@@ -178,6 +178,12 @@ public final class Constants {
     public static final boolean TUNE = true;
   }
 
+  // Motor ID for the VBelt Subsystem
+  public static final class VBeltMotors {
+    public static final int VBeltMotorRightID = 49;
+    public static final int VBeltMotorLeftID = 50;
+  }
+
 
   public static final class HopperConstants {
     public static final int HOPPER_MOTOR_ID = 20;
