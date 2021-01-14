@@ -15,12 +15,13 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.IntakeActuators;
+import frc.robot.Constants.VBeltMotors;
 import frc.robot.commands.DefaultIntakeCommand;
 
 public class VBeltSubsystem extends SubsystemBase {
   private DoubleSolenoid m_solenoid;
-  private VictorSPX m_motor;
+  private VictorSPX m_motor_right;
+  private VictorSPX m_motor_left;
 
   private boolean m_lowered;
   private double m_forwardSpeed;
@@ -33,27 +34,28 @@ public class VBeltSubsystem extends SubsystemBase {
    * Creates a new IntakeSubsystem.
    */
   public VBeltSubsystem() {
-    m_solenoid = new DoubleSolenoid(IntakeActuators.intakeSoleniodForward, IntakeActuators.intakeSoleniodBackward);
-    m_motor = new VictorSPX(IntakeActuators.intakeVictorID);
-    m_forwardSpeed = IntakeActuators.forwardSpeed;
-    m_reverseSpeed = IntakeActuators.reverseSpeed;
-    m_reversePulse = IntakeActuators.reversePulse;
+    //m_solenoid = new DoubleSolenoid(IntakeActuators.intakeSoleniodForward, IntakeActuators.intakeSoleniodBackward);
+    m_motor_right = new VictorSPX(VBeltMotors.VBeltMotorRightID);
+    m_motor_left = new VictorSPX(VBeltMotors.VBeltMotorLeftID);
+    //m_forwardSpeed = IntakeActuators.forwardSpeed;
+    //m_reverseSpeed = IntakeActuators.reverseSpeed;
+    //m_reversePulse = IntakeActuators.reversePulse;
     SmartDashboard.putNumber("class created", m_int);
 
-    if (IntakeActuators.TUNE){
+    /** if (IntakeActuators.TUNE){
       SmartDashboard.putNumber("Intake Motor Output Percent", m_motor.getMotorOutputPercent());
       SmartDashboard.putBoolean("Intake Lowered????", isLowered());
       SmartDashboard.putNumber("Intake Motor Forward Speed", m_forwardSpeed);
       SmartDashboard.putNumber("Intake Motor Reverse Speed", m_reverseSpeed);
       SmartDashboard.putNumber("Intake Motor Reverse Pulse Time", m_reversePulse);
-    }
+    } */
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     
-    if (IntakeActuators.TUNE){
+    /**if (IntakeActuators.TUNE){
       double fs, rs, rp;
       SmartDashboard.putNumber("Intake Motor Output Percent", m_motor.getMotorOutputPercent());
       SmartDashboard.putBoolean("Intake Lowered????", isLowered());
@@ -72,8 +74,8 @@ public class VBeltSubsystem extends SubsystemBase {
       if( rp != m_reversePulse) {
         m_reversePulse = rp;
       }
-
-    }
+      
+    } */
   }
 
   /**
@@ -111,20 +113,22 @@ public class VBeltSubsystem extends SubsystemBase {
    * Set the intake motor to a speed between -1 and 1.
    * @param speed
    */
-  public void setMotor(double speed){
-    m_motor.set(ControlMode.PercentOutput,speed);
+  public void setMotor(double speedRight, double speedLeft){
+    m_motor_right.set(ControlMode.PercentOutput,speedRight);
+    m_motor_left.set(ControlMode.PercentOutput,speedLeft);
   }
 
   public void stopMotor (){
-    m_motor.set(ControlMode.PercentOutput, 0.0);
+    m_motor_right.set(ControlMode.PercentOutput, 0.0);
+    m_motor_left.set(ControlMode.PercentOutput, 0.0);
   }
 
   public void motorForward() {
-    setMotor(m_forwardSpeed);
+    setMotor(m_forwardSpeed, m_forwardSpeed);
   }
 
   public void motorReverse() {
-    setMotor( m_reverseSpeed);
+    setMotor( m_reverseSpeed, m_reverseSpeed);
   }
 
   public double getReversePulse() {
