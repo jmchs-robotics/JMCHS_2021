@@ -262,4 +262,19 @@ public class Paths { // extends CommandBase {
     // turn robot +20 degrees (robot oriented) to face forwards
     // VisionAim and Unload
     */
+
+    /**
+     * Barrel Racing Path:
+     * 
+     */
+
+    /**
+    * Slalom Path:
+    * 
+    */
+
+    /**
+     * Bounce Path:
+     * 
+     */
 }
