@@ -264,14 +264,33 @@ public class Paths { // extends CommandBase {
     */
 
     /**
+     * public DriveForDist2910Command(SwerveDriveSubsystem drivetrain, double distRight, double distForward) {
      * Barrel Racing Path:
-     * 
+     * Start at Southeast coner of Start & Finish zone
+     * Move east 135"
+     * public DriveForDist2910Command(SwerveDriveSubsystem drivetrain, 0, 135) {
+     * Move south 36"
+     * public DriveForDist2910Command(SwerveDriveSubsystem drivetrain, 36, 0) {
+     * Move west 45"
+     * Move north 66"
+     * Move east 174"
+     * Move north 60"
+     * Move west 45"
+     * Move south 150"
+     * Move east 120"
+     * Move north 60"
+     * Move west 294"
      */
 
     /**
-    * Slalom Path:
-    * 
-    */
+     * Slalom Path: without robot path and in feet
+     * Go 9 feet front-left at -56.3 degrees
+     * Go 12 feet forward at 0 degrees
+     * Go 5.6 feet front-right at 63.4 degrees
+     * Go 5.6 feet front-left at -26.6 degrees
+     * Go 13.5 feet back-right at 158.2 degrees
+     * Go 11.2 feet back-left at -153.4 degrees
+     */
 
     /**
      * Bounce Path:
