@@ -49,6 +49,13 @@ public final class Constants {
     public static final int BACK_RIGHT_DRIVE = 31;
   }
 
+  public static final class DrivetrainCANCoders{
+    public static final int FRONT_LEFT  = 27;
+    public static final int FRONT_RIGHT = 28;
+    public static final int BACK_LEFT   = 37;
+    public static final int BACK_RIGHT  = 38;
+  }
+
   public static final class DrivetrainConstants {
     // set for SwerveyJr 191207
     public static final double WHEELBASE = 22;
