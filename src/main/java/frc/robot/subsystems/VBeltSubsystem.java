@@ -25,6 +25,8 @@ public class VBeltSubsystem extends SubsystemBase {
   private double m_reversePulse;
   public static int m_int = 0;
 
+  private DifferentialDrive m_drive;
+
   /**
    * Creates a new VBeltSubsystem.
    */
@@ -34,7 +36,9 @@ public class VBeltSubsystem extends SubsystemBase {
     m_forwardSpeed = VBeltMotors.forwardSpeed;
     m_reverseSpeed = VBeltMotors.reverseSpeed;
     m_reversePulse = VBeltMotors.reversePulse;
-    DifferentialDrive m_drive = new DifferentialDrive(m_motor_right, m_motor_left);
+
+    m_drive = new DifferentialDrive(m_motor_right, m_motor_left);
+    
     SmartDashboard.putNumber("class created", m_int);
 
      if (VBeltMotors.TUNE){
@@ -106,5 +110,12 @@ public class VBeltSubsystem extends SubsystemBase {
     return m_reverseSpeed;
   }
 
+  public void arcadeDrive(double xSpeed, double zRotation) {
+    m_drive.arcadeDrive(xSpeed, zRotation);
+  }
+
+  public void tankDrive(double leftSpeed, double rightSpeed) {
+    m_drive.tankDrive(leftSpeed, rightSpeed);
+  }
 
 }
