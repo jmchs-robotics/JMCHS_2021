@@ -262,6 +262,12 @@ public class Paths { // extends CommandBase {
     // VisionAim and Unload
     */
 
+    /**
+     * Autonomus Paths for the Auto Nav Challenge
+     * They have not been checked by the robot
+     * @return
+     */
+
     public Command PathBarrelCommand() {
       return new SequentialCommandGroup(
         new InstantCommand(m_swerve::setBrakeOn, m_swerve), // Brake mode on!
@@ -294,11 +300,12 @@ public class Paths { // extends CommandBase {
         //x, y (inches) ( + == right, + == up )
         new DriveForDist2910Command(m_swerve, 45, 10.5),
         new DriveForDist2910Command(m_swerve, 0, 35.5),
+        //First Bounce ("bounces"over points B4, B5, and D5??)
         new DriveForDist2910Command(m_swerve, 0, -35.5),
         new DriveForDist2910Command(m_swerve, 30, -20),
         new DriveForDist2910Command(m_swerve, 0, -50),
         new DriveForDist2910Command(m_swerve, 60, 0),
-        new DriveForDist2910Command(m_swerve, 0, 100.5),
+        new DriveForDist2910Command(m_swerve, 0,  .5),
         new DriveForDist2910Command(m_swerve, 0, -100.5),
         new DriveForDist2910Command(m_swerve, 90, 0),
         new DriveForDist2910Command(m_swerve, 0, 100.5),
@@ -325,83 +332,4 @@ public class Paths { // extends CommandBase {
         new DriveForDist2910Command(m_swerve, -37, 0), //Move north 37"
         new DriveForDist2910Command(m_swerve, 0, -60)); //Move west 60"
     }
-
-    /**
-     * public DriveForDist2910Command(SwerveDriveSubsystem drivetrain, double distRight, double distForward) {
-     * Positive distRight is right and negative distRight is left
-     * Positive distForward is forward and negative distForward is backward
-     * 
-     * Barrel Racing Path:
-     * Start at Southeast corner of Start & Finish zone
-     * Move east 135"
-     * public DriveForDist2910Command(SwerveDriveSubsystem drivetrain, 0, 135) {
-     * Move south 36"
-     * public DriveForDist2910Command(SwerveDriveSubsystem drivetrain, 36, 0) {
-     * Move west 45"
-     * public DriveForDist2910Command(SwerveDriveSubsystem drivetrain, 0, -45) {
-     * Move north 66"
-     * public DriveForDist2910Command(SwerveDriveSubsystem drivetrain, -66, 0) {
-     * Move east 174"
-     * public DriveForDist2910Command(SwerveDriveSubsystem drivetrain, 0, 174) {
-     * Move north 60"
-     * public DriveForDist2910Command(SwerveDriveSubsystem drivetrain, -60, 0) {
-     * Move west 45"
-     * public DriveForDist2910Command(SwerveDriveSubsystem drivetrain, 0, -45) {
-     * Move south 150"
-     * public DriveForDist2910Command(SwerveDriveSubsystem drivetrain, 150, 0) {
-     * Move east 120"
-     * public DriveForDist2910Command(SwerveDriveSubsystem drivetrain, 0, 120) {
-     * Move north 60"
-     * public DriveForDist2910Command(SwerveDriveSubsystem drivetrain, -60, 0) {
-     * Move west 294"
-     * public DriveForDist2910Command(SwerveDriveSubsystem drivetrain, 0, -294) {
-     */
-    
-
-    /**
-     * Slalom Path:
-     * Start at Northeast corner of Start zone, 1/2 an inch south and 1/2 west of D2 cone
-     * Move east 60" 
-     * public DriveForDist2910Command(SwerveDriveSubsystem drivetrain, 0, 60) {
-     * Move north 37"
-     * public DriveForDist2910Command(SwerveDriveSubsystem drivetrain, -37, 0) {
-     * Move east 180"
-     * public DriveForDist2910Command(SwerveDriveSubsystem drivetrain, 0, 180) {
-     * Move south 37"
-     * public DriveForDist2910Command(SwerveDriveSubsystem drivetrain, 37, 60) {
-     * Move east 45"
-     * public DriveForDist2910Command(SwerveDriveSubsystem drivetrain, 0, 45) {
-     * Move north 37"
-     * public DriveForDist2910Command(SwerveDriveSubsystem drivetrain, -37, 0) {
-     * Move west 60"
-     * public DriveForDist2910Command(SwerveDriveSubsystem drivetrain, 0, -60) {
-     * Move south 37"
-     * public DriveForDist2910Command(SwerveDriveSubsystem drivetrain, 37, 60) {
-     * Move west 120"
-     * public DriveForDist2910Command(SwerveDriveSubsystem drivetrain, 0, -120) {
-     * Move north 37"
-     * public DriveForDist2910Command(SwerveDriveSubsystem drivetrain, -37, 0) {
-     * Move west 60"
-     * public DriveForDist2910Command(SwerveDriveSubsystem drivetrain, 0, -60) {
-     * Ends at Souteast Corner of Finnish zone, 1/2 an inch south and 1/2 west of D2 cone
-     */
-
-    /**
-     * Bounce Path:
-     * Start coords: (60, 65) -- 5 inches above the bottom right-hand cone, with the robot
-     * bumper on the start box boundary. All movements are strafe.
-     * x, y (inches) ( + == right, + == up )
-     * 45, 10.5
-     * 0, 35.5
-     * 0, -35.5
-     * 30, -20
-     * 0, -50
-     * 60, 0
-     * 0, 100.5
-     * 0, -100.5
-     * 90, 0
-     * 0, 100.5
-     * 0, -40.5
-     * 30, 0
-     */
 }
