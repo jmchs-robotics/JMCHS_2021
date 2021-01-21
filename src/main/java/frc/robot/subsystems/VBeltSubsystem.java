@@ -8,14 +8,17 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.Constants.VBeltMotors;
 
+
+
 public class VBeltSubsystem extends SubsystemBase {
-  private VictorSPX m_motor_right;
-  private VictorSPX m_motor_left;
+  private WPI_VictorSPX m_motor_right;
+  private WPI_VictorSPX m_motor_left;
 
   private double m_forwardSpeed;
   private double m_reverseSpeed;
@@ -26,11 +29,12 @@ public class VBeltSubsystem extends SubsystemBase {
    * Creates a new VBeltSubsystem.
    */
   public VBeltSubsystem() {
-    m_motor_right = new VictorSPX(VBeltMotors.VBeltMotorRightID);
-    m_motor_left = new VictorSPX(VBeltMotors.VBeltMotorLeftID);
+    m_motor_right = new WPI_VictorSPX(VBeltMotors.VBeltMotorRightID);
+    m_motor_left = new WPI_VictorSPX(VBeltMotors.VBeltMotorLeftID);
     m_forwardSpeed = VBeltMotors.forwardSpeed;
     m_reverseSpeed = VBeltMotors.reverseSpeed;
     m_reversePulse = VBeltMotors.reversePulse;
+    DifferentialDrive m_drive = new DifferentialDrive(m_motor_right, m_motor_left);
     SmartDashboard.putNumber("class created", m_int);
 
      if (VBeltMotors.TUNE){
@@ -101,4 +105,6 @@ public class VBeltSubsystem extends SubsystemBase {
   public double getReverseSpeed() {
     return m_reverseSpeed;
   }
+
+
 }
