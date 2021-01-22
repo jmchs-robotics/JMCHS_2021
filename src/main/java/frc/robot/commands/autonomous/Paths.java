@@ -300,8 +300,8 @@ public class Paths { // extends CommandBase {
         //x, y (inches) ( + == right, + == up )
         new DriveForDist2910Command(m_swerve, 45, 10.5),
         new DriveForDist2910Command(m_swerve, 0, 35.5),
-        //First Bounce ("bounces"over points B4, B5, and D5??)
         new DriveForDist2910Command(m_swerve, 0, -35.5),
+        //First Bounce ("bounces"over points B4, B5, and D5??)
         new DriveForDist2910Command(m_swerve, 30, -20),
         new DriveForDist2910Command(m_swerve, 0, -50),
         new DriveForDist2910Command(m_swerve, 60, 0),
