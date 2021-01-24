@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -19,9 +21,14 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  * project.
  */
 public class Robot extends TimedRobot {
-  private Command m_autonomousCommand;
 
+  private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
+
+  private int m_sdThrottleCtr = 0;
+
+  private final SendableChooser<String> startPosChooser = new SendableChooser<>();	
+	
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -31,7 +38,19 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
+
+    startPosChooser.setDefaultOption("Path1 back 12, left 57", "1");
+    startPosChooser.addOption("Path2 fwd 12, left 57", "2");
+    startPosChooser.addOption("Barrel", "barrel");
+    startPosChooser.addOption("Bounce", "bounce");
+    startPosChooser.addOption("Slalom", "slalom");
+		
+		// 'print' the Chooser to the dashboard
+		SmartDashboard.putData("Path Chosen", startPosChooser);
+
+
     m_robotContainer = new RobotContainer();
+    m_robotContainer.visionInit();
   }
 
   /**
@@ -48,6 +67,21 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+
+    m_sdThrottleCtr ++;
+    if( m_sdThrottleCtr % 10 == 0) {
+      String a = "NADA";
+      try {
+        a = m_robotContainer.getRftSocketReader().get().get_direction();
+        SmartDashboard.putNumber("RFT Degrees", m_robotContainer.getRftSocketReader().get().get_degrees_x());
+        // Pull down the match specific string and put it on the Dashboard
+        SmartDashboard.putString("Match String", m_robotContainer.getGameSpecificMessage());
+      } catch( Exception e ) {
+      }
+      a = a + " " + a + " " + a;
+      SmartDashboard.putString("RFT Vision", a);
+    }
+    m_sdThrottleCtr = m_sdThrottleCtr % 50;
   }
 
   /**
@@ -56,7 +90,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     // Kill vision
-    m_robotContainer.visionShutDown();
+   // m_robotContainer.visionShutDown();
   }
 
   @Override
@@ -70,8 +104,12 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     // Initialize vision
     m_robotContainer.visionInit();
+    // reset the Daisy encoder and index, to match its current position
+    m_robotContainer.resetHopperReference( false);
 
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    String startPos = startPosChooser.getSelected();
+		
+    m_autonomousCommand = m_robotContainer.getAutonomousCommand( startPos);
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
@@ -90,6 +128,8 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     // Initialize vision
     m_robotContainer.visionInit();
+    // reset the Daisy encoder and index, to match its current position
+    // m_robotContainer.resetHopperReference( false);
     
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
@@ -105,9 +145,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    // Pull down the match specific string and put it on the Dashboard
-    SmartDashboard.putString("Match String", m_robotContainer.getGameSpecificMessage());
-  }
+    }
 
   @Override
   public void testInit() {
