@@ -28,10 +28,19 @@ import edu.wpi.first.wpilibj.util.Color;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  public static final boolean SHOW_DEBUG_VISION = false;
-  
   // Declare inner public classes to segment constants
 
+  /**
+   * for vision sockets, comms with Vision Co-processor, and using vision within the rest of the subsystems.
+   */
+  public static final class Vision {
+    public static final boolean SHOW_DEBUG = false;
+    public static final long RFT_X_OFFSET = 45; // offset in pixels of vision output vs where we want to point/move the robot
+    public static final double RFT_PIXELS_TO_DEGREES = .110755; 
+    public static final boolean TUNE = true;
+    public static final double RFT_X_OFFSET_LL = 0;  // limelight offset, degrees, 3/9
+  }
+  
   /**
   * Contains the CAN IDs of the Drivetrian SparkMax motors
   */ 
@@ -58,8 +67,8 @@ public final class Constants {
 
   public static final class DrivetrainConstants {
     // set for SwerveyJr 191207
-    public static final double WHEELBASE = 22;
-    public static final double TRACKWIDTH = 19.5;
+    public static final double WHEELBASE = 27.5;
+    public static final double TRACKWIDTH = 18.5;
     public static final double WIDTH = 25.75;
     public static final double LENGTH = 28;
 
@@ -78,133 +87,24 @@ public final class Constants {
     public static final double FORWARD_kI = 0.0;
     public static final double FORWARD_kD = 0.0;
 
-    // PID constants for whole-drivetrain strafe control
-    public static final double ROTATION_kP = 0.01;
+    // PID constants for whole-drivetrain strafe control.
+    // 0.03, 0, 0.075 are from 2910's pose angle code
+    public static final double ROTATION_kP = 0.03;
     public static final double ROTATION_kI = 0.0;
     public static final double ROTATION_kD = 0.0;
-  }
 
-  /**
-   * Contains the CAN IDs of the elevator SparkMax motors
-   */
-  public static final class ThrowerMotors {
-    public static final int LEFT_MOTOR = 21;
-    public static final int RIGHT_MOTOR = 22;
-    public static final boolean INVERT_FOLLOWER = false;
-  }
+    // PID for controlling rotation in DriveForDist2910Command
+    // they had set .02, 0, 0 
+    public static final double DFD_ROTATION_kP = 0.03; // for next test after 3/1, try drastically reducing from 0.03
+    public static final double DFD_ROTATION_kI = 0.0;
+    public static final double DFD_ROTATION_kD = 0.0;
 
-  /**
-   * Contains the physical and PID constants of the Thrower subsystem
-   */
-  public static final class ThrowerConstants {
-    public static final double kP = 0;
-    public static final double kI = 0;
-    public static final double kD = 0;
-    public static final double FEED_FORWARD = 0;
-    public static final double kIz = 0;
-    public static final double MIN_OUTPUT = -1;
-    public static final double MAX_OUTPUT = 1;
-    public static final double GEAR_RATIO_MOTOR_TO_WHEEL = 40/48; // 40T pinion, 48T wheel gear
-    public static final int UPDATE_RATE = 5;  // 200 Hz update rate leader -> follower. Default 10ms
+    // PID for controlling pose angle in SetPoseAngle2910 and VisionAim* commands.
+    public static final double POSE_ANGLE_kP = 0.03;
+    public static final double POSE_ANGLE_kI = 0.0;
+    public static final double POSE_ANGLE_kD = 0.0;
 
-    public static final boolean TUNE = false;
-  }
-
-  /**
-   * Contains the LUT for the thrower
-   */
-  public static final class ThrowerLUT {
-    // Known distance to rpm values, where
-    // index = [some mathematical formula, e.g. (int)distance/20]
-    private static final double[] LUT = {
-
-    };
-
-    /**
-     * Use a LUT to map distance to RPMs. Linearly approximate between values.
-     */
-    public static double distanceToRPMs(double inches){
-      // TODO: implement LUT
-      return inches;
-    }
-  }
-
-  public static final class HopperConstants {
-    public static final int MAIN_MOTOR_ID = 15;
-    public static final double ENCODER_TICKS_TO_REVOLUTION = 4096.0;
-
-    public static final int SENSOR_PORT = 0;
-	  public static final double BALL_LOADED_VOLTAGE = 3;
-
-    public static final TalonSRXConfiguration GetMainMotorConfiguration(){
-      TalonSRXConfiguration config = new TalonSRXConfiguration();
-
-      /* Talon SRX */
-      config.primaryPID.selectedFeedbackSensor = FeedbackDevice.RemoteSensor0;
-      config.primaryPID.selectedFeedbackCoefficient = 0.328293;
-      config.auxiliaryPID.selectedFeedbackSensor = FeedbackDevice.Analog;
-      config.auxiliaryPID.selectedFeedbackCoefficient = 0.877686;
-      config.forwardLimitSwitchSource = LimitSwitchSource.Deactivated;
-      config.reverseLimitSwitchSource = LimitSwitchSource.Deactivated;
-      config.sum0Term = FeedbackDevice.QuadEncoder;
-      config.sum1Term = FeedbackDevice.RemoteSensor0;
-      config.diff0Term = FeedbackDevice.RemoteSensor1;
-      config.diff1Term = FeedbackDevice.PulseWidthEncodedPosition;
-      config.peakCurrentLimit = 20;
-      config.peakCurrentDuration = 200;
-      config.continuousCurrentLimit = 30;
-      config.openloopRamp = 1.023000;
-      config.closedloopRamp = 1.705000;
-      config.peakOutputForward = 0.939394;
-      config.peakOutputReverse = -0.289345;
-      config.nominalOutputForward = 0.739980;
-      config.nominalOutputReverse = -0.119257;
-      config.neutralDeadband = 0.199413;
-      config.voltageCompSaturation = 9.296875;
-      config.voltageMeasurementFilter = 16;
-      config.velocityMeasurementPeriod = VelocityMeasPeriod.Period_25Ms;
-      config.velocityMeasurementWindow = 8;
-      config.forwardLimitSwitchDeviceID = 6;
-      config.reverseLimitSwitchDeviceID = 5;
-      config.forwardLimitSwitchNormal = LimitSwitchNormal.Disabled;
-      config.reverseLimitSwitchNormal = LimitSwitchNormal.Disabled;
-      config.forwardSoftLimitThreshold = 2767;
-      config.reverseSoftLimitThreshold = -1219;
-      config.forwardSoftLimitEnable = false;
-      config.reverseSoftLimitEnable = false;
-
-      config.slot0.kP = 504.000000;
-      config.slot0.kI = 5.600000;
-      config.slot0.kD = 0.200000;
-      config.slot0.kF = 19.300000;
-      config.slot0.integralZone = 900;
-      config.slot0.allowableClosedloopError = 217;
-      config.slot0.maxIntegralAccumulator = 254.000000;
-      config.slot0.closedLoopPeakOutput = 0.869990;
-      config.slot0.closedLoopPeriod = 33;
-
-      config.auxPIDPolarity = true;
-      config.remoteFilter0.remoteSensorDeviceID = 0;
-      config.remoteFilter0.remoteSensorSource = RemoteSensorSource.Off;
-      config.remoteFilter1.remoteSensorDeviceID = 0;
-      config.remoteFilter1.remoteSensorSource = RemoteSensorSource.Off;
-      config.motionCruiseVelocity = 37;
-      config.motionAcceleration = 3;
-      config.motionProfileTrajectoryPeriod = 11;
-      config.feedbackNotContinuous = true;
-      config.remoteSensorClosedLoopDisableNeutralOnLOS = false;
-      config.clearPositionOnLimitF = true;
-      config.clearPositionOnLimitR = true;
-      config.clearPositionOnQuadIdx = false;
-      config.limitSwitchDisableNeutralOnLOS = true;
-      config.softLimitDisableNeutralOnLOS = false;
-      config.pulseWidthPeriod_EdgesPerRot = 9;
-      config.pulseWidthPeriod_FilterWindowSz = 32;
-      config.customParam0 = 3;
-      config.customParam1 = 5;
-
-      return config;
-    }
+    public static final boolean TUNE = true;
   }
 
   /**
@@ -215,33 +115,167 @@ public final class Constants {
     public static final Color kGreenTarget = ColorMatch.makeColor(0.197, 0.561, 0.240);
     public static final Color kRedTarget = ColorMatch.makeColor(0.561, 0.232, 0.114);
     public static final Color kYellowTarget = ColorMatch.makeColor(0.361, 0.524, 0.113);
+    public static final double cpSpinnerSpeed = 0.5;
   }
-
+  
   /**
-   * Constants for the control panel subsystem
+   * Constants for the control panel
    */
   public static final class ControlPanelActuators {
-    public static final int SOLENOID_FORWARD_CHANNEL = 0;
-    public static final int SOLENOID_REVERSE_CHANNEL = 1;
-    public static final int SPINNER_ID = 16;
-    public static final Port COLOR_SENSOR_PORT = I2C.Port.kOnboard;
+    public static final int victorID = 10;
+    public static final int soleniodForward = 0;
+    public static final int soleniodBackward = 1;
+    public static final Port sensorPort = I2C.Port.kOnboard;
+    public static final boolean TUNE = true;
   }
 
   /**
-   * Constants for the intake subsystem
+   * Constants for the climb
    */
+  public static final class ClimbConstants {
+    public static final int climbVictorID = 8;
+    public static final int soleniodForward = 4;
+    public static final int soleniodBackward = 5;
+    public static final int extendSolenoidForward = 6;
+    public static final int extendSolenoidReverse = 7;
+
+    // motor run characteristics
+    public static final double forwardSpeed = 0.7;
+    public static final double reverseSpeed = -0.7;
+
+    // set to true to put motor speed and other data on the smart dashboard
+    public static final boolean TUNE = true;
+  }
+
+  // vision coprocessor computes distance as inverse of width of target
+  // if robot is at an angle (i.e. not straight on) then the coprocessor will think the target is farther than it is
+  // by a factor of the cos(angle from straight on), i.e. the projection of the target
+  // set this to true to multiply the distance returned by vision to the angle of the robot's pose,
+  // i.e. to scale the distance back down
+  public static final class ThrowerVision {
+    public static final boolean ADAPT_SPEED_TO_POSE_ANGLE = true;
+  }
+
+  public static final class ThrowerMotor {
+    public static final int THROWER_MASTER_ID = 14;
+    public static final int THROWER_FOLLOWER_ID = 15;
+    public static final boolean INVERT_FOLLOWER = false;
+	public static final int LED_CHANNEL = 0;
+  }
+
+  public static final class ThrowerPIDs {
+    public static final double kP = 2e-4;
+    public static final double kI = 1e-6;
+    public static final double kD = 0.0;
+    public static final double FEED_FORWARD = 0.0; // minimum useful 1/18 seems to be 0.001
+    public static final double kIz = 0;
+    public static final double MIN_OUTPUT = -1;
+    public static final double MAX_OUTPUT = 1;
+    public static final double GEAR_RATIO_MOTOR_TO_WHEEL = 35.0 / 35.0; // 40T pinion, 48T wheel gear
+    public static final int UPDATE_RATE = 5; // msecs  200 Ht update rate leader -> folloer. Default 10ms
+    public static final boolean TIME = false;
+    public static final boolean TUNE = true;
+  }
+
   public static final class IntakeActuators {
-    public static final int SOLENOID_FORWARD_CHANNEL = 2;
-    public static final int SOLENOID_REVERSE_CHANNEL = 3;
-    public static final int INTAKE_MOTOR_PWM_ID = 0;
+    public static final int intakeVictorID = 9;
+    public static final int intakeSoleniodForward = 2;
+    public static final int intakeSoleniodBackward = 3;
+
+    // motor run characteristics
+    public static final double forwardSpeed = 0.7;
+    public static final double reverseSpeed = -0.7;
+    public static final double reversePulse = 0.5; 
+
+    // set to true to put motor speed and other data on the smart dashboard
+    public static final boolean TUNE = true;
   }
 
-  /**
-   * Constants for the climber subsystem
-   */
-  public static final class ClimberActuators {
-    public static final int SOLENOID_FORWARD_CHANNEL = 4;
-    public static final int SOLENOID_REVERSE_CHANNEL = 5;
-    public static final int WINCH_MOTOR = 17;
+  // Motor ID for the VBelt Subsystem
+    public static final class VBeltMotors {
+    public static final int VBeltMotorRightID = 49;
+    public static final int VBeltMotorLeftID = 50;
+
+    // motor run characteristics
+    public static final double forwardSpeed = 0.7;
+    public static final double reverseSpeed = -0.7;
+    public static final double reversePulse = 0.5;
+
+    // set to true to put motor speed and other data on the smart dashboard
+    public static final boolean TUNE = true;
   }
+
+
+  public static final class HopperConstants {
+    public static final int HOPPER_MOTOR_ID = 20;
+    public static final double ONE_ROTATION = 4096;
+    public static final int ALLOWABLE_ERROR = 0;
+
+    public static final double DAISY_OFFSET = 20 * 4096/360;
+    public static final double DARK_THRESH = 3.2; // between 0 (pitch black) and 5 (bright light)
+    // number of samples (one every 0.02 seconds) over which we want to 
+    //average the photodiode’s input to make sure we only trigger when a ball’s really there
+    public static final int PHOTO_NUM_SAMPLES = 12; 
+    public static final int sdThrottleReset = 25; // start counting from here to 50 for how often to update the SmartDashboard
+    
+  }
+
+  public static final class HopperPIDs {
+    /**
+	  * Which PID slot to pull gains from. Starting 2018, you can choose from
+	  * 0,1,2 or 3. Only the first two (0,1) are visible in web-based
+    * configuration.
+    */
+    /**
+	  * Talon SRX/ Victor SPX will supported multiple (cascaded) PID loops. For
+	  * now we just want the primary one.
+	  */
+    public static final int kPIDLoopIdx = 0;
+
+    public static final double kP = 1.6; // 2e-2;
+    public static final double kI = 0; // 1e-6;
+    public static final double kD = 0.0;
+    public static final double kF = 0; // 2e-6;
+    public static final double MIN_OUTPUT = -0.3;
+    public static final double MAX_OUTPUT = 0.3;
+    
+	  /**
+	  * Set to zero to skip waiting for confirmation, set to nonzero to wait and
+	  * report to DS if action fails.
+	  */
+	  public static final int kTimeoutMs = 0; // 30;
+	
+    /** 
+     * Choose so that Talon does not report sensor out of phase 
+    * false for prototyping 1/26/20.  
+    * Perhaps set to true when we have the daisy built.
+    */
+	  public static boolean kSensorPhase = false;
+
+	  /**
+	  * Choose based on what direction you want to be positive
+	  */
+	  public static boolean kMotorInvert = false;
+
+    // set to true to put PID and other data on the smart dashboard
+    public static final boolean TUNE = true;
+    
+  }
+
+  /** 
+   * which DIO ports control which LEDs
+   */
+  public static final class LED {
+    public static final int GREEN = 0;
+    public static final int SPOTLIGHT = 1;
+  }
+
+  /** 
+   * autonomous 
+   */
+  public static final class AUTO {
+    public static final double DISTANCE_CHECK_TIME = 0.25;
+    public static final boolean TUNE = true;
+  }
+
 }
