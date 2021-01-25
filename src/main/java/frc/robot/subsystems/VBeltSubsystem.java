@@ -11,14 +11,18 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.Constants.VBeltMotors;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 
 
 public class VBeltSubsystem extends SubsystemBase {
   private WPI_VictorSPX m_motor_right;
   private WPI_VictorSPX m_motor_left;
+
+  private final XboxController m_stick;
 
   private double m_forwardSpeed;
   private double m_reverseSpeed;
@@ -110,17 +114,15 @@ public class VBeltSubsystem extends SubsystemBase {
     return m_reverseSpeed;
   }
 
-  public void arcadeDrive(double xSpeed, double zRotation) {
+  public void arcadeDrive(double xSpeed, double zRotation)
+  {
     m_drive.arcadeDrive(xSpeed, zRotation);
   }
 
-  public void tankDrive(double leftSpeed, double rightSpeed) {
-    m_drive.tankDrive(leftSpeed, rightSpeed);
+  //arcade drive with the joystick
+  public void arcadeDrive()
+  {
+    m_drive.arcadeDrive(-m_stick.getY(), m_stick.getX());
   }
-
-  /*public void arcadeDrive() {
-		//robotDrive.arcadeDrive( Robot.oi.driverJoystick.getX(), Robot.oi.driverJoystick.getY()); feels like 90 deg off
-		robotDrive.arcadeDrive(-Robot.oi.driverJoystick.getY(), Robot.oi.driverJoystick.getX());
-	}*/
 
 }
