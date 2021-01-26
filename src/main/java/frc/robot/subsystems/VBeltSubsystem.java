@@ -22,7 +22,6 @@ public class VBeltSubsystem extends SubsystemBase {
   private WPI_VictorSPX m_motor_right;
   private WPI_VictorSPX m_motor_left;
 
-  private final XboxController m_stick;
 
   private double m_forwardSpeed;
   private double m_reverseSpeed;
@@ -119,10 +118,5 @@ public class VBeltSubsystem extends SubsystemBase {
     m_drive.arcadeDrive(xSpeed, zRotation);
   }
 
-  //arcade drive with the joystick
-  public void arcadeDrive()
-  {
-    m_drive.arcadeDrive(-m_stick.getY(), m_stick.getX());
-  }
 
 }
