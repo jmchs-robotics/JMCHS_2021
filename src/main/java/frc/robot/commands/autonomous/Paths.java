@@ -45,7 +45,7 @@ public class Paths { // extends CommandBase {
         new WaitCommand( 1), 
         new BumpHopperCommand(m_Hopper),
         new WaitCommand(.2),
-        new MoveHopperCommand(m_Hopper, 1),
+        new MoveHopperCommand(m_Hopper, 1), 
         new WaitCommand( 1),// give the drivetrain a chance to respond to the SetWheelAngle command
         new BumpHopperCommand(m_Hopper),
         new WaitCommand(.2),
@@ -233,7 +233,6 @@ public class Paths { // extends CommandBase {
 
       );
     }
-
     
     /**
      * PathG
@@ -262,4 +261,75 @@ public class Paths { // extends CommandBase {
     // turn robot +20 degrees (robot oriented) to face forwards
     // VisionAim and Unload
     */
+
+    /**
+     * Autonomus Paths for the Auto Nav Challenge
+     * They have not been checked by the robot
+     * @return
+     */
+
+    public Command PathBarrelCommand() {
+      return new SequentialCommandGroup(
+        new InstantCommand(m_swerve::setBrakeOn, m_swerve), // Brake mode on!
+        new SetWheelAngleCommand( m_swerve, Math.atan2( 57-28, -(86-12-(34+6.5)/2))),  // point the wheels in the direction we want to go
+        new InstantCommand( m_swerve::setDrivePIDToSlow, m_swerve), 
+        
+        //On the image in the manual referencing the path, north means up, south means down, east means right/foward, and west means left/backward
+        //DriveforDist2910Command(Subsystem drivetrain, distRight, distFoward)
+        //Going around Nav Point D5
+        new DriveForDist2910Command(m_swerve, 0, 135), //Move east 135"
+        new DriveForDist2910Command(m_swerve, 36, 0), //Move south 36"
+        new DriveForDist2910Command(m_swerve, 0, -45), //Move west 45"
+        new DriveForDist2910Command(m_swerve, -66, 0), //Move north 66"
+        //Going around Nav Point B8
+        new DriveForDist2910Command(m_swerve, 0, 174), //Move east 174"
+        new DriveForDist2910Command(m_swerve, -60, 0), //Move north 60"
+        new DriveForDist2910Command(m_swerve, 0, -45), //Move west 45"
+        new DriveForDist2910Command(m_swerve, 150, 0), //Move south 150"
+        //Going around Nav Point D10 and to Finish Zone
+        new DriveForDist2910Command(m_swerve, 0, 120), //Move east 120"
+        new DriveForDist2910Command(m_swerve, -60, 0), //Move north 60"
+        new DriveForDist2910Command(m_swerve, 0, -294)); //Move west 294"
+    }
+
+    public Command PathBounceCommand() {
+      return new SequentialCommandGroup(
+        new InstantCommand(m_swerve::setBrakeOn, m_swerve), // Brake mode on!
+        new SetWheelAngleCommand( m_swerve, Math.atan2( 57-28, -(86-12-(34+6.5)/2))),  // point the wheels in the direction we want to go
+        new InstantCommand( m_swerve::setDrivePIDToSlow, m_swerve), 
+        //x, y (inches) ( + == right, + == up )
+        new DriveForDist2910Command(m_swerve, 45, 10.5),
+        new DriveForDist2910Command(m_swerve, 0, 35.5),
+        new DriveForDist2910Command(m_swerve, 0, -35.5),
+        //First Bounce ("bounces"over points B4, B5, and D5??)
+        new DriveForDist2910Command(m_swerve, 30, -20),
+        new DriveForDist2910Command(m_swerve, 0, -50),
+        new DriveForDist2910Command(m_swerve, 60, 0),
+        new DriveForDist2910Command(m_swerve, 0,  .5),
+        new DriveForDist2910Command(m_swerve, 0, -100.5),
+        new DriveForDist2910Command(m_swerve, 90, 0),
+        new DriveForDist2910Command(m_swerve, 0, 100.5),
+        new DriveForDist2910Command(m_swerve, 0, -40.5),
+        new DriveForDist2910Command(m_swerve, 30, 0));
+    }
+
+    public Command PathSlalomCommand() {
+      return new SequentialCommandGroup(
+        new InstantCommand(m_swerve::setBrakeOn, m_swerve), // Brake mode on!
+        new SetWheelAngleCommand( m_swerve, Math.atan2( 57-28, -(86-12-(34+6.5)/2))),  // point the wheels in the direction we want to go
+        new InstantCommand( m_swerve::setDrivePIDToSlow, m_swerve), 
+        //On the image in the manual referencing the path, north means up, south means down, east means right/foward, and west means left/backward
+        //DriveforDist2910Command(Subsystem drivetrain, distRight, distFoward)
+        new DriveForDist2910Command(m_swerve, 0, 60), //Move east 60"
+        new DriveForDist2910Command(m_swerve, -37, 0), //Move north 37"
+        new DriveForDist2910Command(m_swerve, 0, 180), //Move east 180"
+        new DriveForDist2910Command(m_swerve, 37, 60), //Move south 37"         ??? 60 --> and east 60"?
+        new DriveForDist2910Command(m_swerve, 0, 45), //Move east 45"
+        new DriveForDist2910Command(m_swerve, -37, 0), //Move north 37"         
+        new DriveForDist2910Command(m_swerve, 0, -60), //Move west 60"
+        new DriveForDist2910Command(m_swerve, 37, 60), //Move south 37"         ??? 60 --> and east 60"?
+        new DriveForDist2910Command(m_swerve, 0, -120), //Move west 120"
+        new DriveForDist2910Command(m_swerve, -37, 0), //Move north 37"
+        new DriveForDist2910Command(m_swerve, 0, -60)); //Move west 60"
+    }
 }

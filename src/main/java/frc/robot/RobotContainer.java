@@ -377,7 +377,22 @@ public class RobotContainer {
           new InstantCommand( m_Hopper::setBallCountTo3, m_Hopper),
           p.Path2Command()
         );
-    }
+      case "barrel":
+        autoCommand = new SequentialCommandGroup( 
+          new InstantCommand( m_Hopper::setBallCountTo3, m_Hopper),
+          p.PathBarrelCommand()
+        );
+      case "slalom":
+        autoCommand = new SequentialCommandGroup(
+          new InstantCommand( m_Hopper::setBallCountTo3, m_Hopper),
+          p.PathSlalomCommand()
+        );
+      case "bounce":
+        autoCommand = new SequentialCommandGroup( 
+          new InstantCommand( m_Hopper::setBallCountTo3, m_Hopper),
+          p.PathBounceCommand()
+        );
+    }   
 
     return autoCommand;
     /*
