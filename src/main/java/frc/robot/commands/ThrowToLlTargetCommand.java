@@ -27,9 +27,9 @@ public class ThrowToLlTargetCommand extends CommandBase {
 
   // switching to Limelight 3/9
   private NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-  private NetworkTableEntry tx = table.getEntry("tx");
-  private NetworkTableEntry ty = table.getEntry("ty");
-  private NetworkTableEntry tv = table.getEntry("tv");
+  private NetworkTableEntry tx = table.getEntry("tx"); // angle between target and crosshairs, X, -29.8 to 29.8 degrees
+  private NetworkTableEntry ty = table.getEntry("ty"); // angle between target and crosshairs, Y, -24.85 to 24.85 degrees
+  private NetworkTableEntry tv = table.getEntry("tv"); // valid target(s)? (0 or 1)
 
   private double setpoint = 0;
 
